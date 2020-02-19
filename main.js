@@ -9,7 +9,7 @@ ctx.rect(0, 0, width, height)
 ctx.fill();
 ctx.imageSmoothingEnabled = false;
 
-function drawInvader(imageData, x, y, fillColor) {
+function drawInvader(imageData, fillColor) {
     const sh = 6;
     const sw = 3;
     const fsw = 6;
@@ -27,28 +27,7 @@ function drawInvader(imageData, x, y, fillColor) {
                 imageData.data[ii + 1] = fillColor[1]
                 imageData.data[ii + 2] = fillColor[2]
                 imageData.data[ii + 3] = 255
-            } else {
-                imageData.data[i] = 0
-                imageData.data[i + 1] = 0
-                imageData.data[i + 2] = 0
-                imageData.data[i + 3] = 0
-                imageData.data[ii] = 0
-                imageData.data[ii + 1] = 0
-                imageData.data[ii + 2] = 0
-                imageData.data[ii + 3] = 0
             }
-        }
-    }
-}
-
-function dimDown(imageData, x, y, factor) {
-    const w = 6;
-    const h = 6;
-
-    for (let y = 0; y < h; y++) {
-        for (let x = 0; x < w; x++) {
-            const i = (x + (y * w)) * 4
-            imageData.data[i + 3] = Math.floor(imageData.data[i + 3] * factor)
         }
     }
 }
@@ -70,44 +49,49 @@ function wrap(value, min, max) {
 function drawInvaders() {
     const cy = Math.floor(height / 8)
     const cx = Math.floor(width / 8)
+    const y = 0
     let imageData
-    for (let y = 0; y < cy; y++) {
-        for (let x = 0; x < cx; x++) {
-            let fillColor = currentFillColor >= fillColors.length ? 
-                fillColors[Math.floor(Math.random() * fillColors.length)] :
-                fillColors[currentFillColor]
-            let posX = x * 8 + 1
-            let posY = y * 8 + 1
-            imageData = ctx.getImageData(posX, posY, 6, 6)
-            if (Math.random() >= 0.80) {
-                drawInvader(imageData, posX, posY, fillColor)
-            } 
-            ctx.putImageData(imageData, posX, posY)
-        }
+    for (let x = 0; x < cx; x++) {
+        let fillColor = currentFillColor >= fillColors.length ? 
+            fillColors[Math.floor(Math.random() * fillColors.length)] :
+            fillColors[currentFillColor]
+        let posX = x * 8 + 1
+        let posY = y * 8 + 1
+        imageData = ctx.getImageData(posX, posY, 6, 6)
+        if (Math.random() >= 0.80) {
+            drawInvader(imageData, fillColor)
+        } 
+        ctx.putImageData(imageData, posX, posY)
     }
     currentFillColor = wrap(currentFillColor + 1, 0, 3)
+}
+
+function dimAll(factor) {
+    const w = ctx.canvas.width
+    const h = ctx.canvas.height
+    let imageData = ctx.getImageData(0, 0, w, h)
+    for (let i = 0; i < imageData.data.length; i = i + 4) {
+        imageData.data[i + 3] = Math.floor(imageData.data[i + 3] * factor)
+    }
+    currentFillColor = wrap(currentFillColor + 1, 0, 3)
+    ctx.putImageData(imageData, 0, 0)
+}
+
+function moveDown() {
+    const d = ctx.getImageData(0, 0, ctx.canvas.width, ctx.canvas.height)
+    ctx.putImageData(d, 0, 1)
+}
+
+let i = 0
+function update() {
+    if (i % 8 === 0) {
+        drawInvaders()
+        dimAll(0.95)
+    }
+    i++
+    moveDown()
+    window.requestAnimationFrame(update);
     const dataUrl = canvas.toDataURL()
     document.body.style.backgroundImage = `url(${dataUrl})`
 }
-
-function dimAll() {
-    const cy = Math.floor(height / 8)
-    const cx = Math.floor(width / 8)
-    let imageData
-    for (let y = 0; y < cy; y++) {
-        for (let x = 0; x < cx; x++) {
-            let posX = x * 8 + 1
-            let posY = y * 8 + 1
-            imageData = ctx.getImageData(posX, posY, 6, 6)
-            dimDown(imageData, posX, posY, 0.95)
-            ctx.putImageData(imageData, posX, posY)
-        }
-    }
-    currentFillColor = wrap(currentFillColor + 1, 0, 3)
-    const dataUrl = canvas.toDataURL()
-    document.body.style.backgroundImage = `url(${dataUrl})`
-}
-
-drawInvaders()
-setInterval(drawInvaders, 5000);
-setInterval(dimAll, 200)
+update()
