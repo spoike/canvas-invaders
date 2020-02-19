@@ -4,9 +4,6 @@ const width = canvas.width
 const height = canvas.height
 
 // background
-ctx.fillStyle = 'black'
-ctx.rect(0, 0, width, height)
-ctx.fill();
 ctx.imageSmoothingEnabled = false;
 
 function drawInvader(imageData, fillColor) {
@@ -41,7 +38,7 @@ let currentFillColor = 0
 
 function wrap(value, min, max) {
     if (value > max) {
-        return min
+        return value % max + min
     }
     return value
 }
@@ -84,6 +81,7 @@ function moveDown() {
 }
 
 let i = 0
+let hue = 0
 function update() {
     if (i % 8 === 0) {
         drawInvaders()
@@ -93,6 +91,9 @@ function update() {
     moveDown()
     window.requestAnimationFrame(update);
     const dataUrl = canvas.toDataURL()
-    document.body.style.backgroundImage = `url(${dataUrl})`
+    document.getElementById('hitzone').style.backgroundImage = `url(${dataUrl}), linear-gradient(black, black 80%, hsl(${hue}deg, 100%, 12%))`
 }
 update()
+document.getElementById('hitzone').addEventListener('mousemove', (event) => {
+    hue = wrap(event.x / window.innerWidth * 360 + 140, 0, 360)
+})
