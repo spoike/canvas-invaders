@@ -39,7 +39,18 @@ function drawInvader(imageData, x, y, fillColor) {
             }
         }
     }
-    ctx.putImageData(imageData, x, y)
+}
+
+function dimDown(imageData, x, y, factor) {
+    const w = 6;
+    const h = 6;
+
+    for (let y = 0; y < h; y++) {
+        for (let x = 0; x < w; x++) {
+            const i = (x + (y * w)) * 4
+            imageData.data[i + 3] = Math.floor(imageData.data[i + 3] * factor)
+        }
+    }
 }
 
 const fillColors = [
@@ -57,19 +68,46 @@ function wrap(value, min, max) {
 }
 
 function drawInvaders() {
-    const imageData = ctx.getImageData(0, 0, 6, 6)
     const cy = Math.floor(height / 8)
     const cx = Math.floor(width / 8)
+    let imageData
     for (let y = 0; y < cy; y++) {
         for (let x = 0; x < cx; x++) {
             let fillColor = currentFillColor >= fillColors.length ? 
                 fillColors[Math.floor(Math.random() * fillColors.length)] :
                 fillColors[currentFillColor]
-            drawInvader(imageData, x * 8 + 1, y * 8 + 1, fillColor)
+            let posX = x * 8 + 1
+            let posY = y * 8 + 1
+            imageData = ctx.getImageData(posX, posY, 6, 6)
+            if (Math.random() >= 0.80) {
+                drawInvader(imageData, posX, posY, fillColor)
+            } 
+            ctx.putImageData(imageData, posX, posY)
         }
     }
     currentFillColor = wrap(currentFillColor + 1, 0, 3)
+    const dataUrl = canvas.toDataURL()
+    document.body.style.backgroundImage = `url(${dataUrl})`
+}
+
+function dimAll() {
+    const cy = Math.floor(height / 8)
+    const cx = Math.floor(width / 8)
+    let imageData
+    for (let y = 0; y < cy; y++) {
+        for (let x = 0; x < cx; x++) {
+            let posX = x * 8 + 1
+            let posY = y * 8 + 1
+            imageData = ctx.getImageData(posX, posY, 6, 6)
+            dimDown(imageData, posX, posY, 0.95)
+            ctx.putImageData(imageData, posX, posY)
+        }
+    }
+    currentFillColor = wrap(currentFillColor + 1, 0, 3)
+    const dataUrl = canvas.toDataURL()
+    document.body.style.backgroundImage = `url(${dataUrl})`
 }
 
 drawInvaders()
-setInterval(drawInvaders, 10 * 1000);
+setInterval(drawInvaders, 5000);
+setInterval(dimAll, 200)

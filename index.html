@@ -9,21 +9,21 @@
     body {
         margin: 0;
         background-color: black;
-        display: flex;
-        align-items: center;
-        justify-content: center;
         background-image: url();
+        background-repeat: no-repeat;
+        background-size: cover;
+        image-rendering: pixelated;
+        background-position-x: center;
     }
     body > canvas {
-        width: calc(8px * 150);
-        height: calc(8px * 150);
         image-rendering: pixelated;
+        display: none;
     }
     </style>
 
 </head>
 <body>
-   <canvas id="canvas" width="300" height="300"></canvas> 
+   <canvas id="canvas" width="800" height="600"></canvas> 
 </body>
 <script src="main.js"></script>
 </html>
