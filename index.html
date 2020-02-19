@@ -20,19 +20,25 @@
         position: absolute;
         top: -16px;
         left: 0;
-        height: 100vh;
         width: 100vw;
+        height: calc(100vh + 16px);
         background-repeat: no-repeat;
-        background-size: cover;
         image-rendering: pixelated;
         background-position-x: center;
+        background-attachment: fixed;
+        background-size: cover;
+        -webkit-background-size: cover;
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
+        transform: translate3d(0,0,0);
+        -webkit-transform: translate3d(0,0,0);
     }
     </style>
 
 </head>
 <body>
    <canvas id="canvas" width="480" height="360"></canvas> 
-   <div id="hitzone"></div>
+   <img id="hitzone" src="" width="480" height="360"></img>
    <script src="main.js"></script>
 </body>
 </html>

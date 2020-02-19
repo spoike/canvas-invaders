@@ -91,7 +91,8 @@ function update() {
     moveDown()
     window.requestAnimationFrame(update);
     const dataUrl = canvas.toDataURL()
-    document.getElementById('hitzone').style.backgroundImage = `url(${dataUrl}), linear-gradient(black, black 80%, hsl(${hue}deg, 100%, 12%))`
+    document.getElementById('hitzone').setAttribute('src', dataUrl)
+    document.body.style.backgroundImage = `linear-gradient(black, black 80%, hsl(${hue}deg, 100%, 12%))`
 }
 update()
 document.getElementById('hitzone').addEventListener('mousemove', (event) => {
