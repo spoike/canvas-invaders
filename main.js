@@ -30,9 +30,9 @@ function drawInvader(imageData, fillColor) {
 }
 
 const fillColors = [
-    [255, 255, 255], // white
-    [255, 180, 100], // amber
     [100, 255, 100], // green
+    [255, 180, 100], // amber
+    [255, 255, 255], // white
 ]
 let currentFillColor = 0
 
