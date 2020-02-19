@@ -24,6 +24,15 @@ function drawInvader(imageData, fillColor) {
                 imageData.data[ii + 1] = fillColor[1]
                 imageData.data[ii + 2] = fillColor[2]
                 imageData.data[ii + 3] = 255
+            } else {
+                imageData.data[i] = 0
+                imageData.data[i + 1] = 0
+                imageData.data[i + 2] = 0
+                imageData.data[i + 3] = 0
+                imageData.data[ii] = 0
+                imageData.data[ii + 1] = 0
+                imageData.data[ii + 2] = 0
+                imageData.data[ii + 3] = 0
             }
         }
     }
@@ -50,18 +59,17 @@ function drawInvaders() {
     const cy = Math.floor(height / 8)
     const cx = Math.floor(width / 8)
     const y = 0
-    let imageData
+    let imageData = ctx.getImageData(0, 0, 6, 6)
     for (let x = 0; x < cx; x++) {
         let fillColor = currentFillColor >= fillColors.length ? 
             fillColors[Math.floor(Math.random() * fillColors.length)] :
             fillColors[currentFillColor]
         let posX = x * 8 + 1
         let posY = y * 8 + 1
-        imageData = ctx.getImageData(posX, posY, 6, 6)
         if (Math.random() >= 0.80) {
             drawInvader(imageData, fillColor)
+            ctx.putImageData(imageData, posX, posY)
         } 
-        ctx.putImageData(imageData, posX, posY)
     }
 }
 
