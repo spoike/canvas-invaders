@@ -45,6 +45,9 @@ function wrap(value, min, max) {
     }
     return value
 }
+document.getElementById('hitzone').addEventListener('pointerdown', () => {
+    currentFillColor = wrap(currentFillColor + 1, 0, 3)
+})
 
 function drawInvaders() {
     const cy = Math.floor(height / 8)
@@ -63,7 +66,6 @@ function drawInvaders() {
         } 
         ctx.putImageData(imageData, posX, posY)
     }
-    currentFillColor = wrap(currentFillColor + 1, 0, 3)
 }
 
 function dimAll(factor) {
@@ -73,7 +75,6 @@ function dimAll(factor) {
     for (let i = 0; i < imageData.data.length; i = i + 4) {
         imageData.data[i + 3] = Math.floor(imageData.data[i + 3] * factor)
     }
-    currentFillColor = wrap(currentFillColor + 1, 0, 3)
     ctx.putImageData(imageData, 0, 0)
 }
 

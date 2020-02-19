@@ -19,11 +19,19 @@
         image-rendering: pixelated;
         display: none;
     }
+    #hitzone {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        width: 100vw;
+    }
     </style>
 
 </head>
 <body>
    <canvas id="canvas" width="800" height="600"></canvas> 
+   <div id="hitzone"></div>
 </body>
 <script src="main.js"></script>
 </html>
