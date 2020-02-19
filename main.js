@@ -42,7 +42,7 @@ function wrap(value, min, max) {
     }
     return value
 }
-document.getElementById('hitzone').addEventListener('pointerdown', () => {
+canvas.addEventListener('pointerdown', () => {
     currentFillColor = wrap(currentFillColor + 1, 0, 4)
 })
 
@@ -90,13 +90,9 @@ function update() {
     i++
     moveDown()
     window.requestAnimationFrame(update);
-    /*
-    const dataUrl = canvas.toDataURL()
-    document.getElementById('hitzone').setAttribute('src', dataUrl)
-    */
     document.body.style.backgroundImage = `linear-gradient(black, black 80%, hsl(${hue}deg, 100%, 12%))`
 }
 update()
-document.getElementById('hitzone').addEventListener('mousemove', (event) => {
+canvas.addEventListener('mousemove', (event) => {
     hue = wrap(event.x / window.innerWidth * 360 + 140, 0, 360)
 })
