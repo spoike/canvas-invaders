@@ -90,8 +90,10 @@ function update() {
     i++
     moveDown()
     window.requestAnimationFrame(update);
+    /*
     const dataUrl = canvas.toDataURL()
     document.getElementById('hitzone').setAttribute('src', dataUrl)
+    */
     document.body.style.backgroundImage = `linear-gradient(black, black 80%, hsl(${hue}deg, 100%, 12%))`
 }
 update()
