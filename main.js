@@ -37,13 +37,13 @@ const fillColors = [
 let currentFillColor = 0
 
 function wrap(value, min, max) {
-    if (value > max) {
+    if (value >= max) {
         return value % max + min
     }
     return value
 }
 document.getElementById('hitzone').addEventListener('pointerdown', () => {
-    currentFillColor = wrap(currentFillColor + 1, 0, 3)
+    currentFillColor = wrap(currentFillColor + 1, 0, 4)
 })
 
 function drawInvaders() {
