@@ -5,9 +5,9 @@ const height = canvas.height
 const ctx = canvas.getContext('2d')
 ctx.imageSmoothingEnabled = false;
 
-const invaderWidth = 11;
-const invaderHalfWidth = Math.ceil(invaderWidth / 2);
-const invaderHeight = 8;
+let invaderWidth = 8;
+let invaderHalfWidth = Math.ceil(invaderWidth / 2);
+let invaderHeight = 8;
 
 function drawInvader(imageData, fillColor) {
     const sw = invaderHalfWidth;
@@ -104,4 +104,28 @@ function update() {
 update()
 canvas.addEventListener('mousemove', (event) => {
     hue = wrap(event.x / window.innerWidth * 360 + 140, 0, 360)
+})
+
+function clamp(value, min, max) {
+    return Math.max(Math.min(value, max), min)
+}
+document.body.addEventListener('keydown', (event) => {
+    switch (event.code) {
+        case 'ArrowDown':
+            invaderHeight = clamp(invaderHeight - 1, 1, 12)
+            break;
+        case 'ArrowUp':
+            invaderHeight = clamp(invaderHeight + 1, 1, 12)
+            break;
+        case 'ArrowLeft':
+            invaderWidth = clamp(invaderWidth - 1, 1, 12)
+            break;
+        case 'ArrowRight':
+            invaderWidth = clamp(invaderWidth + 1, 1, 12)
+            break;
+        default:
+            break;
+    }
+    invaderHalfWidth = Math.ceil(invaderWidth / 2)
+    console.log(`resized to (${invaderWidth}, ${invaderHeight})`)
 })
