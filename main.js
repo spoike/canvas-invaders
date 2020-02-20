@@ -1,15 +1,18 @@
 const canvas = document.getElementById('canvas')
-const ctx = canvas.getContext('2d')
 const width = canvas.width
 const height = canvas.height
 
-// background
+const ctx = canvas.getContext('2d')
 ctx.imageSmoothingEnabled = false;
 
+const invaderWidth = 11;
+const invaderHalfWidth = Math.ceil(invaderWidth / 2);
+const invaderHeight = 8;
+
 function drawInvader(imageData, fillColor) {
-    const sh = 6;
-    const sw = 3;
-    const fsw = 6;
+    const sw = invaderHalfWidth;
+    const fsw = invaderWidth;
+    const sh = invaderHeight;
 
     for (let y = 0; y < sh; y++) {
         for (let x = 0; x < sw; x++) {
@@ -56,16 +59,16 @@ canvas.addEventListener('pointerdown', () => {
 })
 
 function drawInvaders() {
-    const cy = Math.floor(height / 8)
-    const cx = Math.floor(width / 8)
+    const cx = Math.floor(width / invaderWidth)
+    const cy = Math.floor(height / invaderHeight)
     const y = 0
-    let imageData = ctx.getImageData(0, 0, 6, 6)
+    let imageData = ctx.getImageData(0, 0, invaderWidth, invaderHeight)
     for (let x = 0; x < cx; x++) {
         let fillColor = currentFillColor >= fillColors.length ? 
             fillColors[Math.floor(Math.random() * fillColors.length)] :
             fillColors[currentFillColor]
-        let posX = x * 8 + 1
-        let posY = y * 8 + 1
+        let posX = x * (invaderWidth + 2) + 1
+        let posY = y * (invaderHeight + 2) + 1
         if (Math.random() >= 0.80) {
             drawInvader(imageData, fillColor)
             ctx.putImageData(imageData, posX, posY)
@@ -74,9 +77,7 @@ function drawInvaders() {
 }
 
 function dimAll(factor) {
-    const w = ctx.canvas.width
-    const h = ctx.canvas.height
-    let imageData = ctx.getImageData(0, 0, w, h)
+    let imageData = ctx.getImageData(0, 0, width, height)
     for (let i = 0; i < imageData.data.length; i = i + 4) {
         imageData.data[i + 3] = Math.floor(imageData.data[i + 3] * factor)
     }
@@ -84,14 +85,14 @@ function dimAll(factor) {
 }
 
 function moveDown() {
-    const d = ctx.getImageData(0, 0, ctx.canvas.width, ctx.canvas.height)
+    const d = ctx.getImageData(0, 0, width, height)
     ctx.putImageData(d, 0, 1)
 }
 
 let i = 0
 let hue = 0
 function update() {
-    if (i % 8 === 0) {
+    if (i % (invaderHeight + 2) === 0) {
         drawInvaders()
         dimAll(0.95)
     }
